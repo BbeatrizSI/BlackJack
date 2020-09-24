@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./assets/images/cards-icon1.png" />
+    <title>Blackjack</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body>
+    <header class="header__title">Blackjack</header>
+
+    <div class="row mt-2">
+      <div class="col text-center">
+        <button id="btnNew" class="btn btn-outline-warning">Nuevo Juego</button>
+
+        <button id="btnCard" class="btn btn-primary" disabled="disabled">
+          Pedir Carta
+        </button>
+
+        <button id="btnStop" class="btn btn-danger" disabled="disabled">
+          Detener
+        </button>
+      </div>
+    </div>
+
+    <div class="row container">
+      <div class="col">
+        <h1>Jugador 1 - <small>0</small></h1>
+
+        <div class="card__container divCards" id="player-cards">
+          <!-- <img class="card" src="assets/cards/2C.png" /> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="row container mt-2">
+      <div class="col">
+        <h1>Computadora - <small>0</small></h1>
+
+        <div class="card__container divCards" id="computer-cards">
+          <!-- <img class="card" src="assets/cards/2C.png" /> -->
+        </div>
+      </div>
+    </div>
+    <script src="assets/js/underscore-min.js"></script>
+    <script src="assets/js/game.js"></script>
+    <!-- <script>
+      myModule.newGame();
+    </script> -->
+  </body>
+</html>
