@@ -1,10 +1,11 @@
 'use strict';
 
 let deck = [];
-let playingCards = [];
+let playingCards = [[], []];
 const types = ['C', 'D', 'H', 'S'],
   specials = ['A', 'J', 'Q', 'K'];
 let pointsPlayers = [];
+let specialConditionAce = false;
 
 // Referencias HTML
 const btnNew = document.querySelector('#btnNew'),
@@ -16,7 +17,11 @@ const divCards = document.querySelectorAll('.divCards'),
 // Esta función inicia el juego
 const startGame = (players = 2) => {
   deck = createDeck();
+  specialConditionAce = false;
+  console.log(deck);
+
   pointsPlayers = [];
+  playingCards = [[], []];
   for (let i = 0; i < players; i++) {
     pointsPlayers.push(0);
   }
@@ -40,16 +45,16 @@ const createDeck = () => {
       deck.push(special + type);
     }
   }
-
   return _.shuffle(deck);
 };
 
 // Esta función me permite coger una carta
-const takeCard = () => {
+const takeCard = (turn) => {
   if (deck.length === 0) {
     throw 'No quedan cartas en el mazo';
   }
-  playingCards.push(deck.slice(deck.length - 1, deck.length)[0]);
+
+  playingCards[turn].push(deck.slice(deck.length - 1, deck.length)[0]);
 
   return deck.pop();
 };
@@ -66,18 +71,26 @@ const cardValue = (card) => {
 
 // Turno: 0 = Primer jugador, 1 = Computadora
 const sumPoints = (card, turn) => {
-  // pointsPlayers[turn] = pointsPlayers[turn] + cardValue(card);
+  pointsPlayers[turn] = pointsPlayers[turn] + cardValue(card);
+  console.log(card);
 
-  if (playingCards.includes('A') && pointsPlayers[turn] > 21) {
-    pointsPlayers[turn] = pointsPlayers[turn] + cardValue(card) - 10;
-    console.log('condicion 1');
-  } else {
-    pointsPlayers[turn] = pointsPlayers[turn] + cardValue(card);
-    console.log('condicion 2');
+  console.log(specialConditionAce);
+
+  if (
+    playingCards[turn].includes('AC' || 'AD' || 'AH' || 'AS') &&
+    pointsPlayers[turn] > 21 &&
+    specialConditionAce == false
+  ) {
+    pointsPlayers[turn] = pointsPlayers[turn] - 10;
+    specialConditionAce = true;
+    console.log('condicion especial', specialConditionAce);
+  } else if (cardValue(card) === 11 && pointsPlayers[turn] > 21) {
+    pointsPlayers[turn] = pointsPlayers[turn] - 10;
+    specialConditionAce = true;
+    console.log('SOY un AS', specialConditionAce);
   }
 
-  console.log(deck);
-  console.log(playingCards);
+  console.log({ playingCards });
 
   counterPoints[turn].innerText = pointsPlayers[turn];
   return pointsPlayers[turn];
@@ -103,15 +116,16 @@ const whoWins = () => {
     } else {
       alert('Computadora gana');
     }
-  }, 50);
+  }, 200);
 };
 
 // Turno de la computadora
 const computerTurn = (minPoints) => {
   btnStop.disabled = true;
+  specialConditionAce = false;
   let computerPoints = 0;
   do {
-    const card = takeCard();
+    const card = takeCard(1);
     computerPoints = sumPoints(card, pointsPlayers.length - 1);
     throwCard(card, pointsPlayers.length - 1);
   } while (computerPoints <= minPoints && minPoints <= 21);
@@ -122,7 +136,7 @@ const computerTurn = (minPoints) => {
 // Eventos
 // Pedir carta
 btnCard.addEventListener('click', () => {
-  const card = takeCard();
+  const card = takeCard(0);
   const playerPoints = sumPoints(card, 0);
 
   throwCard(card, 0);
