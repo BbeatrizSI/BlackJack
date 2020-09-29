@@ -75,6 +75,7 @@ const sumPoints = (card, turn) => {
   console.log(card);
 
   console.log(specialConditionAce);
+  console.log(turn);
 
   if (
     playingCards[turn].includes('AC' || 'AD' || 'AH' || 'AS') &&
